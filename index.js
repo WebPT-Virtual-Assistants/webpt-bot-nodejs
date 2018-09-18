@@ -1,8 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const unirest = require('unirest');
+const { WebhookClient } = require('dialogflow-fulfillment');
 
 const server = express();
+
+
 
 server.use(bodyParser.urlencoded({
 	extended: true
@@ -11,8 +14,9 @@ server.use(bodyParser.urlencoded({
 server.use(bodyParser.json());
 
 server.post('/webhook', (req, res) => {
-	console.log(req);
-	console.log(res);
+	//Create an instance
+	const agent = new WebhookClient({request: req, response: res});
+	console.log(agent);
 	return res.json({
 		speech: 'Something went wrong!',
 		displayText: 'Something went wrong!',
