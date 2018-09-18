@@ -1,0 +1,20 @@
+{
+  "name": "webpt-bot-nodejs",
+  "version": "1.0.0",
+  "description": "Webhooks for WebPT chatbot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "example",
+    "heroku"
+  ],
+  "author": "WebPT",
+  "license": "Unlicensec",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "unirest": "^0.5.1"
+  }
+}
