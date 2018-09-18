@@ -2,10 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const unirest = require('unirest');
 const {
-  dialogflow,
-  Image,
+	dialogflow,
+	Image
 } = require('actions-on-google')
-const { WebhookClient } = require('dialogflow-fulfillment');
+const { 
+	WebhookClient,
+	Card,
+	Suggestion
+	} = require('dialogflow-fulfillment');
 
 const server = express();
 
@@ -21,11 +25,14 @@ server.post('/webhook', (req, res) => {
 	//Create an instance
 	const agent = new WebhookClient({request: req, response: res});
 	console.log(agent);
-	return res.json({
-		speech: 'Something went wrong!',
-		displayText: 'Something went wrong!',
-		source: 'webhook'
-	});
+	
+	function flight(agent) {
+		agent.add("Hello World");
+	}
+	
+	let intentMap = new Map();
+	intentMap.set('flight', flight);
+	agent.handleRequest(intentMap);
 });
 
 server.listen((process.env.PORT || 8000), () => {
