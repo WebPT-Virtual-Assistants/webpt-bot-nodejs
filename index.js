@@ -30,7 +30,7 @@ function WebhookProcessing(req, res) {
 }
 
 // Webhook
-app.post('/webhook', function (req, res) {
+server.post('/webhook', function (req, res) {
     console.info(`\n\n>>>>>>> S E R V E R   H I T <<<<<<<`);
     WebhookProcessing(req, res);
 });
