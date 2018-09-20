@@ -12,16 +12,12 @@ const {
 	} = require('dialogflow-fulfillment');
 
 const server = express();
-
-
-
-server.use(bodyParser.urlencoded({
-	extended: true
-}));
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({extended: true}));
 
 server.use(bodyParser.json());
 
-server.post('/webhook', (req, res) => {
+function WebhookProcessing(req, res) {
 	//Create an instance
 	const agent = new WebhookClient({request: req, response: res});
 	console.log(agent);
@@ -33,6 +29,12 @@ server.post('/webhook', (req, res) => {
 	let intentMap = new Map();
 	intentMap.set('flight', flight);
 	agent.handleRequest(intentMap);
+});
+
+// Webhook
+app.post('/webhook', function (req, res) {
+    console.info(`\n\n>>>>>>> S E R V E R   H I T <<<<<<<`);
+    WebhookProcessing(req, res);
 });
 
 server.listen((process.env.PORT || 8000), () => {
