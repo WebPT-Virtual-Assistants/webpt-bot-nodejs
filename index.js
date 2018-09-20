@@ -25,7 +25,7 @@ function WebhookProcessing(req, res) {
 	}
 	
 	let intentMap = new Map();
-	intentMap.set('flight', flight);
+	intentMap.set('print-form', flight);
 	agent.handleRequest(intentMap);
 }
 
