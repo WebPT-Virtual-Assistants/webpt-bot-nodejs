@@ -15,8 +15,6 @@ const server = express();
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 
-server.use(bodyParser.json());
-
 function WebhookProcessing(req, res) {
 	//Create an instance
 	const agent = new WebhookClient({request: req, response: res});
@@ -29,7 +27,7 @@ function WebhookProcessing(req, res) {
 	let intentMap = new Map();
 	intentMap.set('flight', flight);
 	agent.handleRequest(intentMap);
-});
+}
 
 // Webhook
 app.post('/webhook', function (req, res) {
