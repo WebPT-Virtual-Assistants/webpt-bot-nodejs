@@ -33,7 +33,7 @@ function WebhookProcessing(req, res) {
 server.post('/webhook', function (req, res) {
     console.info(`\n\n>>>>>>> S E R V E R   H I T <<<<<<<`);
     WebhookProcessing(req, res);
-	var speech = '<speak><audio src="http://soundbible.com/mp3/Computer%20Error%20Alert-SoundBible.com-783113881.mp3>Hit</audio></speak>"'
+	var speech = '<speak><audio src="http://soundbible.com/mp3/Computer%20Error%20Alert-SoundBible.com-783113881.mp3">Hit</audio></speak>'
 	res.setHeader('Content-Type','application/json');
 	res.send(JSON.stringify({
 		speech: speech,
