@@ -31,6 +31,7 @@ function WebhookProcessing(req, res) {
 	var speech = '<speak><audio src="http://soundbible.com/mp3/Computer Error Alert-SoundBible.com-783113881.mp3>Hit</audio></speak>"'
 	return res.json({
 		speech: speech,
+		display: speech,
 		source: 'webpt'
 	});
 }
