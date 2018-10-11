@@ -16,7 +16,7 @@ server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 
 function WebhookProcessing(req, res) {
-	//Create an instance
+	/* //Create an instance
 	const agent = new WebhookClient({request: req, response: res});
 	console.log(agent);
 	
@@ -26,7 +26,13 @@ function WebhookProcessing(req, res) {
 	
 	let intentMap = new Map();
 	intentMap.set('print-form', flight);
-	agent.handleRequest(intentMap);
+	agent.handleRequest(intentMap); */
+	
+	var speech = '<speak><audio src="http://soundbible.com/mp3/Computer Error Alert-SoundBible.com-783113881.mp3>Hit</audio></speak>"'
+	return res.json({
+		speech: speech,
+		source: 'webpt'
+	});
 }
 
 // Webhook
