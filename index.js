@@ -21,7 +21,7 @@ var userDict = [];
 
 
 function printInfo() {
-	console.log()
+	console.log();
 }
 
 function WebhookProcessing(req, res) {
@@ -34,17 +34,26 @@ function WebhookProcessing(req, res) {
 	var ssml = `<speak>` + errorSound + `</audio>` + `</speak>`;
 
 	switch(intent){
+		case "Welcome Intent":
+		  ssml = `<speak>Welcome to the Web<say-as interpret-as="characters">PT</say-as> Virtual Agent.</speak>`;
 		case "print-form":
 			console.log(agent.session);
 			break;
 		case "WebPT Objective Documentation":
-		  break;
-		case "WebPT Subjective Documentation":
-		  if (agent.parameters['body-part'] !== undefined){
-		  	var bodypart = agent.parameters['body-part'];
+			if (agent.parameters['vitals'] !== ""){
+				let vitals_name = agent.parameters['vitals'];
 				ssml = `<speak>` + successSound + origMess + `</audio>` + `</speak>`;
 			} else {
 				ssml = `<speak>` + errorSound + origMess + `</audio>` + `</speak>`;
+			}
+			break;
+		case "WebPT Subjective Documentation":
+			console.log(agent.parameters['number1']);
+			let bodypart = agent.parameters['body-part'];
+			if (agent.parameters['number1'] !== ""){
+				ssml = `<speak>` + successSound + origMess + `</audio>` + `</speak>`;
+			} else {
+				ssml = `<speak>` + errorSound + `You are missing the value for the pain scale of ` + bodypart + `</audio>` + `</speak>`;
 			}
 		  break;
 		case "WebPT Plan Documentation":
@@ -52,6 +61,12 @@ function WebhookProcessing(req, res) {
 		case "WebPT Assessment Documentation":
 		  break;
     case "WebPT Objective Treatments":
+			if (agent.parameters['duration'] !== ""){
+				let duration = agent.parameters['duration'];
+				ssml = `<speak>` + successSound + origMess + `</audio>` + `</speak>`;
+			} else {
+				ssml = `<speak>` + errorSound + origMess + `</audio>` + `</speak>`;
+			}
 		  break;
     case "play-sound":
 		  ssml = `<speak> Error Sound:` + errorSound  + `Error sound was output.</audio>` +
