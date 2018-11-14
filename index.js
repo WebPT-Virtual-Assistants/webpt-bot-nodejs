@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const unirest = require('unirest');
+const pg = require("pg");
 const {
 	dialogflow,
 	Image
@@ -15,13 +16,15 @@ const server = express();
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 
+const dbConnection = "postgres://meyuzbrp:r4lyWHV96f_X9ouOtZESXsxOOpb_p-TQ@tantor.db.elephantsql.com:5432/meyuzbrp";
+
 const errorSound = `<audio src="https://notificationsounds.com/sound-effects/strange-error-106/download/ogg">`
 const successSound = `<audio src="https://notificationsounds.com/message-tones/filling-your-inbox-251/download/ogg">`
-var userDict = [];
-
+const sessions = [];
+const forms = [];
 
 function printInfo() {
-	console.log();
+	console.log(forms);
 }
 
 function WebhookProcessing(req, res) {
@@ -30,30 +33,70 @@ function WebhookProcessing(req, res) {
 	var intent = agent.intent;
 	let origMess = agent.consoleMessages[agent.consoleMessages.length-1].text;
 	console.log(origMess);
-	console.log(agent.query);
+	console.log(agent.contexts[1].parameters);
 	var ssml = `<speak>` + errorSound + `</audio>` + `</speak>`;
 
 	switch(intent){
 		case "Welcome Intent":
 		  ssml = `<speak>Welcome to the Web<say-as interpret-as="characters">PT</say-as> Virtual Agent.</speak>`;
-		case "print-form":
 			console.log(agent.session);
 			break;
+		case "print-form":
+			let name2 = agent.contexts[0].parameters['given-name'] + agent.contexts[1].parameters['last-name'];
+			printInfo();
+			break;
 		case "WebPT Objective Documentation":
-			if (agent.parameters['vitals'] !== ""){
-				let vitals_name = agent.parameters['vitals'];
+			let name = agent.contexts[1].parameters['given-name'] + agent.contexts[1].parameters['last-name'];
+			let now1 = Date().toString();
+			let vitals_name = agent.parameters['vitals'];
+			let metric1 = agent.parameters['number'];
+			if (vitals_name !== ""){
 				ssml = `<speak>` + successSound + origMess + `</audio>` + `</speak>`;
-			} else {
-				ssml = `<speak>` + errorSound + origMess + `</audio>` + `</speak>`;
+				if (agent.parameters['number'] !== ""){
+					ssml = `<speak>` + successSound + origMess + `</audio>` + `</speak>`;
+					if(forms[name] === undefined){
+						forms[name] = [];
+						forms[name].push({
+							date: now1,
+							vital: vitals_name,
+							measure: metric1
+						});
+					} else {
+						forms[name].push({
+							date: now1,
+							vital: vitals_name,
+							measure: metric1
+						});
+					}
+				} else {
+					ssml = `<speak>` + errorSound + origMess + `</audio>` + `</speak>`;
+				}
 			}
 			break;
 		case "WebPT Subjective Documentation":
-			console.log(agent.parameters['number1']);
+			let metric = agent.parameters['number1'];
+			let now = Date().toString();
 			let bodypart = agent.parameters['body-part'];
+			let name1 = agent.contexts[1].parameters['given-name'] + agent.contexts[1].parameters['last-name'];
 			if (agent.parameters['number1'] !== ""){
 				ssml = `<speak>` + successSound + origMess + `</audio>` + `</speak>`;
+				if(forms[name1] === undefined){
+					forms[name1] = [];
+					forms[name1].push({
+						date: now,
+						vital: bodypart,
+						measure: metric
+					});
+				} else {
+					forms[name1].push({
+						date: now,
+						vital: bodypart,
+						measure: metric
+					});
+				}
 			} else {
-				ssml = `<speak>` + errorSound + `You are missing the value for the pain scale of ` + bodypart + `</audio>` + `</speak>`;
+				ssml = `<speak>` + errorSound + `You are missing the value for the pain scale of ` +
+							bodypart + `</audio>` + `</speak>`;
 			}
 		  break;
 		case "WebPT Plan Documentation":
@@ -92,7 +135,6 @@ function WebhookProcessing(req, res) {
 server.post('/webhook', function (req, res) {
   console.info(`\n\n>>>>>>> S E R V E R   H I T <<<<<<<`);
   WebhookProcessing(req, res);
-
 });
 
 server.listen((process.env.PORT || 8000), () => {
