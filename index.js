@@ -33,7 +33,6 @@ function WebhookProcessing(req, res) {
 	var intent = agent.intent;
 	let origMess = agent.consoleMessages[agent.consoleMessages.length-1].text;
 	console.log(origMess);
-	console.log(agent.contexts[1].parameters);
 	var ssml = `<speak>` + errorSound + `</audio>` + `</speak>`;
 
 	switch(intent){
@@ -43,6 +42,7 @@ function WebhookProcessing(req, res) {
 			break;
 		case "print-form":
 			printInfo();
+			ssml = `<speak>Form was printed</speak>`;
 			break;
 		case "WebPT Objective Documentation":
 			let name = agent.contexts[1].parameters['given-name'] + agent.contexts[1].parameters['last-name'];
@@ -111,9 +111,9 @@ function WebhookProcessing(req, res) {
 			}
 		  break;
     case "play-sound":
-		  ssml = `<speak> Error Sound:` + errorSound  + `Error sound was output.</audio>` +
+		  ssml = `<speak> Error Sound` + errorSound  + ` ...</audio>` +
 			       `<break time="1s"/>` +
-						 `Success Sound:` + successSound  + `Success sound was the output</audio>` +
+						 `Success Sound` + successSound  + ` ...</audio>` +
 						 `</speak>`;
 			break;
 		default:
