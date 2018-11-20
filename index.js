@@ -44,7 +44,7 @@ function WebhookProcessing(req, res) {
 			ssml = origMess;
 			break;
 		case "print-form":
-			console.log(forms);
+			console.dir(forms, {depth: null})
 			ssml = origMess;
 			break;
 		case "WebPT Objective Documentation":
