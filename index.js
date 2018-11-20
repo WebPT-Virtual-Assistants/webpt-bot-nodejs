@@ -42,7 +42,6 @@ function WebhookProcessing(req, res) {
 			console.log(agent.session);
 			break;
 		case "print-form":
-			let name2 = agent.contexts[0].parameters['given-name'] + agent.contexts[1].parameters['last-name'];
 			printInfo();
 			break;
 		case "WebPT Objective Documentation":
