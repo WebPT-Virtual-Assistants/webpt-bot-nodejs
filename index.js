@@ -23,10 +23,6 @@ const successSound = `<audio src="https://notificationsounds.com/message-tones/f
 const sessions = [];
 const forms = [];
 
-function printInfo() {
-	console.log(forms);
-}
-
 function WebhookProcessing(req, res) {
 	 //Create an instance
 	const agent = new WebhookClient({request: req, response: res});
@@ -40,12 +36,19 @@ function WebhookProcessing(req, res) {
 		  ssml = `<speak>Welcome to the Web<say-as interpret-as="characters">PT</say-as> Virtual Agent.</speak>`;
 			console.log(agent.session);
 			break;
+		case "WebPT Conversation":
+			sessions[agent.session] = {
+				givenName: agent.parameters['given-name'],
+				lastName: agent.parameters['last-name']
+			}
+			ssml = origMess;
+			break;
 		case "print-form":
-			printInfo();
-			ssml = `<speak>Form was printed</speak>`;
+			console.log(forms);
+			ssml = origMess;
 			break;
 		case "WebPT Objective Documentation":
-			let name = agent.contexts[1].parameters['given-name'] + agent.contexts[1].parameters['last-name'];
+			let name = agent.session;
 			let now1 = Date().toString();
 			let vitals_name = agent.parameters['vitals'];
 			let metric1 = agent.parameters['number'];
@@ -54,14 +57,18 @@ function WebhookProcessing(req, res) {
 				if (agent.parameters['number'] !== ""){
 					ssml = `<speak>` + successSound + origMess + `</audio>` + `</speak>`;
 					if(forms[name] === undefined){
-						forms[name] = [];
-						forms[name].push({
+						forms[name] = {
+							firstName: sessions[agent.session].givenName,
+							lastName: sessions[agent.session].lastName,
+							info: []
+						};
+						forms[name].info.push({
 							date: now1,
 							vital: vitals_name,
-							measure: metric1
+							measure: metric1,
 						});
 					} else {
-						forms[name].push({
+						forms[name].info.push({
 							date: now1,
 							vital: vitals_name,
 							measure: metric1
@@ -76,18 +83,22 @@ function WebhookProcessing(req, res) {
 			let metric = agent.parameters['number1'];
 			let now = Date().toString();
 			let bodypart = agent.parameters['body-part'];
-			let name1 = agent.contexts[1].parameters['given-name'] + agent.contexts[1].parameters['last-name'];
+			let name1 = agent.session;
 			if (agent.parameters['number1'] !== ""){
 				ssml = `<speak>` + successSound + origMess + `</audio>` + `</speak>`;
 				if(forms[name1] === undefined){
-					forms[name1] = [];
-					forms[name1].push({
+					forms[name1] = {
+						firstName: sessions[agent.session].givenName,
+						lastName: sessions[agent.session].lastName,
+						info: []
+					};
+					forms[name1].info.push({
 						date: now,
 						vital: bodypart,
 						measure: metric
 					});
 				} else {
-					forms[name1].push({
+					forms[name1].info.push({
 						date: now,
 						vital: bodypart,
 						measure: metric
