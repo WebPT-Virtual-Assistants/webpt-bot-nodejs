@@ -100,6 +100,24 @@ function WebhookProcessing(req, res) {
 			let now1 = Date().toString();
 			let vitals_name = agent.parameters['vitals'];
 			let metric1 = agent.parameters['number'];
+
+			console.log(vitals_name);
+			console.log(metric1);
+
+			if(vitals_name === "Blood Pressure") {
+				bp = metric1;
+			}
+			else if(vitals_name === "Heart Rate") {
+				pr = metric1;
+			}
+			else if(vitals_name === "Temperature") {
+				temperature = metric1;
+			}
+			else if(vitals_name === "Respiratory Rate") {
+				rr = metric1;
+			}
+
+
 			if (vitals_name !== ""){
 				ssml = `<speak>` + successSound + origMess + `</audio>` + `</speak>`;
 				if (agent.parameters['number'] !== ""){
