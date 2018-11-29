@@ -73,7 +73,7 @@ function WebhookProcessing(req, res) {
 				}	else if(null_count === 1){
 					ssml += last_null;
 				}
-				last_null = `temperature`;
+				last_null = `body temperature`;
 				null_count++;
 			}
 			if (bp === null) {
@@ -115,7 +115,7 @@ function WebhookProcessing(req, res) {
 				else if(vitals_name[i] === "Heart Rate") {
 					pr = metric1[i];
 				}
-				else if(vitals_name[i] === "Temperature") {
+				else if(vitals_name[i] === "Body Temperature") {
 					temperature = metric1[i];
 				}
 				else if(vitals_name[i] === "Respiratory Rate") {
