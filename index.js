@@ -104,17 +104,19 @@ function WebhookProcessing(req, res) {
 			console.log(vitals_name);
 			console.log(metric1);
 
-			if(vitals_name === "Blood Pressure") {
-				bp = metric1;
-			}
-			else if(vitals_name === "Heart Rate") {
-				pr = metric1;
-			}
-			else if(vitals_name === "Temperature") {
-				temperature = metric1;
-			}
-			else if(vitals_name === "Respiratory Rate") {
-				rr = metric1;
+			for (let i = 0; i < vitals_name.length; i++) {
+				if(vitals_name[i] === "Blood Pressure") {
+					bp = metric1[i];
+				}
+				else if(vitals_name[i] === "Heart Rate") {
+					pr = metric1[i];
+				}
+				else if(vitals_name[i] === "Temperature") {
+					temperature = metric1[i];
+				}
+				else if(vitals_name[i] === "Respiratory Rate") {
+					rr = metric1[i];
+				}
 			}
 
 
