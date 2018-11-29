@@ -94,6 +94,10 @@ function WebhookProcessing(req, res) {
 			} else {
 				ssml = `<speak>All values are present for Objective section.</speak>`;
 			}
+			console.log(bp);
+			console.log(pr);
+			console.log(temperature);
+			console.log(rr);
 			break;
 		case "WebPT Objective Documentation":
 			let name = agent.session;
