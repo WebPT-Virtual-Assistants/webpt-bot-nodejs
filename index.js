@@ -23,6 +23,11 @@ const successSound = `<audio src="https://notificationsounds.com/message-tones/f
 const sessions = [];
 const forms = [];
 
+var rr = null;
+var pr = null;
+var temperature = null;
+var bp = null;
+
 function WebhookProcessing(req, res) {
 	 //Create an instance
 	const agent = new WebhookClient({request: req, response: res});
@@ -47,6 +52,49 @@ function WebhookProcessing(req, res) {
 			console.dir(forms, {depth: null})
 			ssml = origMess;
 			break;
+		case "check-missing":
+			let null_count = 0;
+			let last_null = "";
+			ssml = `<speak>You're missing the `;
+			if (rr === null) {
+				last_null = `respitory rate`;
+				null_count++;
+			}
+			if (pr === null) {
+				if (null_count > 0){
+					ssml += last_null;
+				}
+				last_null = `pulse rate`;
+				null_count++;
+			}
+			if (temperature === null) {
+				if (null_count > 1){
+					ssml += `, ` + last_null;
+				}	else if(null_count === 1){
+					ssml += last_null;
+				}
+				last_null = `temperature`;
+				null_count++;
+			}
+			if (bp === null) {
+				if (null_count > 1){
+					ssml += `, ` + last_null;
+				}	else if(null_count === 1){
+					ssml += last_null;
+				}
+				last_null = `blood pressure`;
+				null_count++;
+			}
+			if (null_count > 2) {
+				ssml += `, and ` + last_null + ` values</speak>`;
+			} else if (null_count === 2) {
+				ssml += ` and ` + last_null + ` values</speak>`;
+			} else if (null_count === 1) {
+				ssml += last_null + ` value</speak>`;
+			} else {
+				ssml = `<speak>All values are present for Objective section.</speak>`;
+			}
+			break;
 		case "WebPT Objective Documentation":
 			let name = agent.session;
 			let now1 = Date().toString();
@@ -65,7 +113,7 @@ function WebhookProcessing(req, res) {
 						forms[name].info.push({
 							date: now1,
 							vital: vitals_name,
-							measure: metric1,
+							measure: metric1
 						});
 					} else {
 						forms[name].info.push({
