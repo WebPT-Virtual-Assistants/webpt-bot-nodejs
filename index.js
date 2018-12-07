@@ -110,7 +110,7 @@ function WebhookProcessing(req, res) {
 
 			for (let i = 0; i < vitals_name.length; i++) {
 				if(vitals_name[i] === "Blood Pressure") {
-					let metric2 = agent.parameters['number1'];
+					let metric2 = agent.parameters['number1'][0];
 					bp = metric1[i] + `/` + metric2;
 				}
 				else if(vitals_name[i] === "Heart Rate") {
