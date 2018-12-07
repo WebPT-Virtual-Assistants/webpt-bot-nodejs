@@ -49,25 +49,25 @@ function WebhookProcessing(req, res) {
 			ssml = origMess;
 			break;
 		case "print-form":
-			console.dir(forms, {depth: null})
+			console.dir(forms, {depth: null});
 			ssml = origMess;
 			break;
 		case "check-missing":
 			let null_count = 0;
 			let last_null = "";
 			ssml = `<speak>You're missing the `;
-			if (rr === null) {
+			if (rr === null || rr === undefined) {
 				last_null = `respitory rate`;
 				null_count++;
 			}
-			if (pr === null) {
+			if (pr === null || pr === undefined) {
 				if (null_count > 0){
 					ssml += last_null;
 				}
 				last_null = `pulse rate`;
 				null_count++;
 			}
-			if (temperature === null) {
+			if (temperature === null || temperature === undefined) {
 				if (null_count > 1){
 					ssml += `, ` + last_null;
 				}	else if(null_count === 1){
@@ -76,7 +76,7 @@ function WebhookProcessing(req, res) {
 				last_null = `body temperature`;
 				null_count++;
 			}
-			if (bp === null) {
+			if (bp === null || bp === undefined) {
 				if (null_count > 1){
 					ssml += `, ` + last_null;
 				}	else if(null_count === 1){
@@ -110,7 +110,8 @@ function WebhookProcessing(req, res) {
 
 			for (let i = 0; i < vitals_name.length; i++) {
 				if(vitals_name[i] === "Blood Pressure") {
-					bp = metric1[i];
+					let metric2 = agent.parameters['number1'];
+					bp = metric1[i] + `/` + metric2;
 				}
 				else if(vitals_name[i] === "Heart Rate") {
 					pr = metric1[i];
