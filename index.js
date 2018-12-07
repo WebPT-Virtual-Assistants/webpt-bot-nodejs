@@ -112,6 +112,7 @@ function WebhookProcessing(req, res) {
 				if(vitals_name[i] === "Blood Pressure") {
 					let metric2 = agent.parameters['number1'][0];
 					bp = metric1[i] + `/` + metric2;
+					metric1[i] = bp;
 				}
 				else if(vitals_name[i] === "Heart Rate") {
 					pr = metric1[i];
